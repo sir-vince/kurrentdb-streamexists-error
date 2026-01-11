@@ -33,17 +33,13 @@ public class AggregateStoreIntegrationTest {
             )).get();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
 
         var readResult = kurrentDBClient.readStream(streamId, ReadStreamOptions.get().fromStart());
 
         var events = readResult.get().getEvents();
+
+        System.out.println(events);
     }
-}
-
-
-sealed interface TestEvents2  {
-    record Created(UUID id, String value) implements TestEvents2 {}
-    record Test1Event(UUID id, String value) implements TestEvents2 {}
-    record Test2Event(UUID id, String value) implements TestEvents2 {}
 }
