@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  kurrent:
+    image: docker.kurrent.io/kurrent-latest/kurrentdb:25.1
+    environment:
+      - KURRENTDB_CLUSTER_SIZE=1
+      - KURRENTDB_RUN_PROJECTIONS=All
+      - KURRENTDB_START_STANDARD_PROJECTIONS=true
+      - KURRENTDB_NODE_PORT=2113
+      - KURRENTDB_INSECURE=true
+      - KURRENTDB_ENABLE_ATOM_PUB_OVER_HTTP=true
+      - KURRENTDB_TELEMETRY_OPTOUT=true
+      - KURRENTDB_LOG_LEVEL=Verbose
+    ports:
+      - '1113:1113'
+      - '2114:2113' # port 2113 is currently reserved on local environment
+    volumes:
+      - type: volume
+        source: kurrentdb-volume-data
+        target: /var/lib/kurrentdb
+      - type: volume
+        source: kurrentdb-volume-logs
+        target: /var/log/kurrentdb
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
+
+volumes:
+  kurrentdb-volume-data:
+  kurrentdb-volume-logs:
